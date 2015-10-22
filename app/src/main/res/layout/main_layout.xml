@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/main_title_text"
+        android:id="@+id/main_title" />
+
+    <TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment class="nb7232.muc_hw1.MapFragment"
+            android:id="@+id/map_fragment"
+            android:layout_width="0px"
+            android:layout_height="match_parent">
+
+        </fragment>
+        <fragment class="nb7232.muc_hw1.SummaryFragment"
+            android:id="@+id/summary_fragment"
+            android:layout_width="0px"
+            android:layout_height="match_parent">
+
+        </fragment>
+        <fragment class="nb7232.muc_hw1.SettingsFragment"
+            android:id="@+id/settings_fragment"
+            android:layout_width="0px"
+            android:layout_height="match_parent">
+
+        </fragment>
+
+    </TabLayout>
+
+
+</LinearLayout>
