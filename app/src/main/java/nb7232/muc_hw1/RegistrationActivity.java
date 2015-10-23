@@ -41,9 +41,7 @@ public class RegistrationActivity extends AppCompatActivity{
     }
 
     public void addListenerOnRegButton() {
-
         findViewById(R.id.registration_register_button).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 set();

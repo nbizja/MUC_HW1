@@ -26,6 +26,12 @@
     <string name="general_password">Password</string>
     <string name="general_occupation">Occupation</string>
     <string name="general_age">Age</string>
+    <string name="general_confirm">Confirm</string>
+
+    <string name="settings_photo_click">Click on the photo to activate the camera</string>
+    <string name="settings_personal_detail">Your personal details:</string>
+    <string name="settings_change_sampling">You can change sampling settings here.</string>
+    <string name="settings_sampling_interval">Sampling interval [minutes]</string>
 
     <string name="main_title_text">Signal mapper</string>
     <string name="main_summary_rssi_home_text">Average RSSI at home:</string>

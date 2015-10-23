@@ -2,7 +2,9 @@ package nb7232.muc_hw1;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,30 +29,39 @@ public class MainActivity extends AppCompatActivity {
         if (prefs.contains("email")) {
             Log.e("Fragments", "juhej");
             // During initial setup, plug in the details fragment.
-            SummaryFragment summaryFragment = new SummaryFragment();
+            /*SummaryFragment summaryFragment = new SummaryFragment();
             summaryFragment.setArguments(getIntent().getExtras());
-
             getSupportFragmentManager().beginTransaction().add(
                     android.R.id.content, summaryFragment).commit();
-
+            */
+            SettingsFragment settingsFragment = new SettingsFragment();
+            settingsFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().add(
+                    android.R.id.content, settingsFragment).commit();
         } else {
             Intent intent = new Intent(this, RegistrationActivity.class);
             startActivity(intent);
         }
-        //startActivity(intent);
+    }
 
-        /*setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public void dispatchTakePictureIntent() {
+        Log.e("Camera", "dispatch!");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("Camera", "returned");
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.e("Camera", "its All good");
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ImageView settingsView = (ImageView) findViewById(R.id.settings_image);
+            settingsView.setBackgroundResource(0);
+            settingsView.setImageBitmap(imageBitmap);
+        }
     }
 }
