@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,10 +15,6 @@ import android.widget.ImageView;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Fragment mapFragment = new ConnectionMapFragment();
-    private Fragment summaryFragment = new SummaryFragment();
-    private Fragment settingsFragment = new SettingsFragment();
-    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,40 +37,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-    public TabLayout.OnTabSelectedListener tabListener() {
-        return new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                        currentFragment = mapFragment;
-                        break;
-                    case 1:
-                        currentFragment = summaryFragment;
-                        break;
-                    case 2:
-                        currentFragment = settingsFragment;
-                        break;
-                    default:
-                        currentFragment = summaryFragment;
-                        break;
-                }
-                currentFragment.setArguments(getIntent().getExtras());
-                getSupportFragmentManager().beginTransaction().replace(
-                        android.R.id.content, currentFragment).commit();
-
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        };
-    }
-
 
     public void dispatchTakePictureIntent() {
         Log.e("Camera", "dispatch!");

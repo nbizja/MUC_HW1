@@ -36,6 +36,7 @@ public class Registration {
         editor.putLong("timestamp", Calendar.getInstance().getTimeInMillis());
         editor.commit();
         Log.e("intent", "plz work");
+
         return true;
     }
 
@@ -48,8 +49,7 @@ public class Registration {
         editor.putString("last_name", user.getLastName());
         editor.putString("email", user.getEmail());
         editor.putInt("sampling_interval", user.getSamplingInterval());
+
         return true;
-
-
     }
 }

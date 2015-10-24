@@ -13,20 +13,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 public class ConnectionMapFragment extends Fragment {
 
+    protected GoogleMap map;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //
-        // return super.onCreateView(inflater, container, savedInstanceState);
+
         View view = inflater.inflate(R.layout.connection_map_fragment, container, false);
-        GoogleMap map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.connection_map))
-                .getMap();
+        if (map == null) {
+            map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.connection_map))
+                    .getMap();
+        }
 
         return view;
     }
-
-    /*
-    @Override
-    public void getMapAsync(OnMapReadyCallback callback) {
-        super.getMapAsync(callback);
-    } */
 }

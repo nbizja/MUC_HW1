@@ -15,6 +15,10 @@ public class SummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.summary_fragment, container, false);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
