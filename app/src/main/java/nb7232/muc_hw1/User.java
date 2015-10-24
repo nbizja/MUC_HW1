@@ -17,6 +17,7 @@ public class User {
     private String email;
     private Sex sex;
     private String password;
+    private Integer samplingInterval;
     private boolean isValid;
 
     public User() {
@@ -92,6 +93,15 @@ public class User {
         return true;
     }
 
+    public boolean setSamplingInterval(Integer samplingInterval) {
+        if (samplingInterval < 0) {
+            this.isValid = false;
+            return false;
+        }
+        this.samplingInterval = samplingInterval;
+        return true;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -148,5 +158,9 @@ public class User {
 
     public Sex getSex() {
         return sex;
+    }
+
+    public Integer getSamplingInterval() {
+        return samplingInterval;
     }
 }

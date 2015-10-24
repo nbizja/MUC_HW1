@@ -19,22 +19,37 @@ public class Registration {
     public boolean register(User user) {
         Log.e("REGISTER CALLED", "RGSTR");
         if (user.isValid()) {
-            Log.e("isValid", "true");
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("uuid", UUID.randomUUID().toString());
-            editor.putString("first_name", user.getFirstName());
-            editor.putString("last_name", user.getLastName());
-            editor.putString("email", user.getEmail());
-            editor.putString("password", user.getPassword());
-            editor.putString("occupation", user.getOccupation());
-            editor.putInt("age", user.getAge());
-            editor.putString("sex", user.getSex().toString());
-            editor.putString("device", Build.BRAND + " " + Build.MODEL);
-            editor.putLong("timestamp", Calendar.getInstance().getTimeInMillis());
-            editor.commit();
-            Log.e("intent", "plz work");
-            return true;
+            return false;
         }
-        return false;
+
+        Log.e("isValid", "true");
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("uuid", UUID.randomUUID().toString());
+        editor.putString("first_name", user.getFirstName());
+        editor.putString("last_name", user.getLastName());
+        editor.putString("email", user.getEmail());
+        editor.putString("password", user.getPassword());
+        editor.putString("occupation", user.getOccupation());
+        editor.putInt("age", user.getAge());
+        editor.putString("sex", user.getSex().toString());
+        editor.putString("device", Build.BRAND + " " + Build.MODEL);
+        editor.putLong("timestamp", Calendar.getInstance().getTimeInMillis());
+        editor.commit();
+        Log.e("intent", "plz work");
+        return true;
+    }
+
+    public boolean changeSettings(User user) {
+        SharedPreferences.Editor editor = prefs.edit();
+        if (!user.isValid()) {
+            return false;
+        }
+        editor.putString("first_name", user.getFirstName());
+        editor.putString("last_name", user.getLastName());
+        editor.putString("email", user.getEmail());
+        editor.putInt("sampling_interval", user.getSamplingInterval());
+        return true;
+
+
     }
 }

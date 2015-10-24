@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">MUC_HW1</string>
     <string name="action_settings">Settings</string>
+    <string name="tab_map">Map</string>
+    <string name="tab_summary">Summary</string>
+    <string name="tab_settings">Settings</string>
+
+
     <string name="registration_consent_text">This application collects WiFi and location data.</string>
     <string name="registration_demographics_text">Please fill out your demographics.</string>
     <string name="registration_personal_info_text">Please fill out your personal info.</string>
@@ -32,6 +37,8 @@
     <string name="settings_personal_detail">Your personal details:</string>
     <string name="settings_change_sampling">You can change sampling settings here.</string>
     <string name="settings_sampling_interval">Sampling interval [minutes]</string>
+    <string name="settings_error_sampling_interval">Sampling interval must be positive number!</string>
+
 
     <string name="main_title_text">Signal mapper</string>
     <string name="main_summary_rssi_home_text">Average RSSI at home:</string>

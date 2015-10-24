@@ -24,8 +24,17 @@ public class SettingsFragment extends Fragment {
                     }
                 }
         );
+
+        fragment.findViewById(R.id.settings_confirm_button).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity activity = (MainActivity) getActivity();
+                        activity.changeSettings();
+                    }
+                }
+        );
+
         return fragment;
     }
-
-
 }
