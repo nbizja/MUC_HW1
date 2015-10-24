@@ -1,4 +1,4 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.model;
 
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -6,6 +6,8 @@ import android.util.Log;
 
 import java.util.Calendar;
 import java.util.UUID;
+
+import nb7232.muc_hw1.model.User;
 
 
 public class Registration {

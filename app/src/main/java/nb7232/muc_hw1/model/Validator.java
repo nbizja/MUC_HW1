@@ -1,4 +1,4 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.model;
 
 
 import android.text.TextUtils;

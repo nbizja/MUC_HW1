@@ -1,4 +1,4 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -8,8 +8,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import nb7232.muc_hw1.R;
+import nb7232.muc_hw1.fragment.ConnectionMapFragment;
+import nb7232.muc_hw1.fragment.SettingsFragment;
+import nb7232.muc_hw1.fragment.SummaryFragment;
 
-public class FragmentSwitcher extends FragmentPagerAdapter {
+
+public class MainActivityFragmentSwitch extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
     private Context context;
@@ -19,7 +24,7 @@ public class FragmentSwitcher extends FragmentPagerAdapter {
     private SettingsFragment settingsFragment = new SettingsFragment();
     private List<String> tabTitles;
 
-    public FragmentSwitcher(FragmentManager fm, Context context) {
+    public MainActivityFragmentSwitch(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
         this.tabTitles = new ArrayList<String>();

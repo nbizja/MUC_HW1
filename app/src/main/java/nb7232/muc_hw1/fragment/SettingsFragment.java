@@ -1,4 +1,4 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.fragment;
 
 
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import nb7232.muc_hw1.R;
+import nb7232.muc_hw1.activity.MainActivity;
 
 public class SettingsFragment extends Fragment {
 

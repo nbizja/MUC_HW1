@@ -1,4 +1,4 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
+import nb7232.muc_hw1.R;
+import nb7232.muc_hw1.model.Registration;
+import nb7232.muc_hw1.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         if (prefs.contains("email")) {
             Log.e("Fragments", "juhej");
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(new FragmentSwitcher(getSupportFragmentManager(),
+            viewPager.setAdapter(new MainActivityFragmentSwitch(getSupportFragmentManager(),
                     MainActivity.this));
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

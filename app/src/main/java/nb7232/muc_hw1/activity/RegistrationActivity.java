@@ -1,4 +1,4 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.activity;
 
 
 import android.content.Intent;
@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import nb7232.muc_hw1.R;
+import nb7232.muc_hw1.model.Registration;
+import nb7232.muc_hw1.model.User;
 
 public class RegistrationActivity extends AppCompatActivity {
 
