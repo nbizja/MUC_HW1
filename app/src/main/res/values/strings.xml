@@ -44,4 +44,5 @@
     <string name="main_summary_rssi_home_text">Average RSSI at home:</string>
     <string name="main_summary_rssi_work_text">Average RSSI at home:</string>
     <string name="main_summary_strongest_ap_text">Strongest WiFi APs:</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

@@ -11,7 +11,7 @@ public class FragmentSwitcher extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
     private Context context;
 
-    private MapFragment mapFragment = new MapFragment();
+    private ConnectionMapFragment connectionMapFragment = new ConnectionMapFragment();
     private SummaryFragment summaryFragment = new SummaryFragment();
     private SettingsFragment settingsFragment = new SettingsFragment();
     private Fragment currentFragment;
@@ -31,7 +31,7 @@ public class FragmentSwitcher extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                currentFragment = mapFragment;
+                currentFragment = connectionMapFragment;
                 tabTitle = "Map";
                 break;
             case 1:

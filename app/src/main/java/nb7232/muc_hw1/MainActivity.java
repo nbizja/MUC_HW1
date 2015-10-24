@@ -8,17 +8,15 @@ import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Fragment mapFragment = new MapFragment();
+    private Fragment mapFragment = new ConnectionMapFragment();
     private Fragment summaryFragment = new SummaryFragment();
     private Fragment settingsFragment = new SettingsFragment();
     private Fragment currentFragment;
