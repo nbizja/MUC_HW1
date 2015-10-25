@@ -16,8 +16,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="@android:drawable/ic_menu_camera"
             android:id="@+id/settings_image"/>
 

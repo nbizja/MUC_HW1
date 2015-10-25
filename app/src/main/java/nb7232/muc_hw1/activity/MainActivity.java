@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ImageView settingsView = (ImageView) findViewById(R.id.settings_image);
             settingsView.setBackgroundResource(0);
+            settingsView.setRotation(90);
             settingsView.setImageBitmap(imageBitmap);
         }
     }
