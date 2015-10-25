@@ -16,14 +16,12 @@ import nb7232.muc_hw1.model.UserHandler;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_layout);
         addListenerOnRegButton();
-        this.user = new User();
 
     }
 
@@ -38,6 +36,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void setUser() {
+        User user = new User();
         EditText occupation = (EditText) findViewById(R.id.registration_occupation_editable);
         if (!user.setOccupation(occupation.getText().toString())) {
             occupation.setError(getResources().getString(R.string.registration_error_occupation));
@@ -73,16 +72,16 @@ public class RegistrationActivity extends AppCompatActivity {
 
         EditText password = (EditText) findViewById(R.id.registration_password_editable);
         if (!user.setRawPassword(password.getText().toString())) {
-            password.setError(getResources().getString(R.string.registration_error_password_match));
+            password.setError(getResources().getString(R.string.registration_error_password_length));
         }
         EditText password2 = (EditText) findViewById(R.id.registration_password_editable2);
         if (!password.getText().toString().equals(password2.getText().toString())) {
+            user.setRawPassword("");
             password2.setError(getResources().getString(R.string.registration_error_password_match));
         }
 
         UserHandler userHandlerService = new UserHandler(getSharedPreferences("preferences", MODE_PRIVATE));
-        boolean success = userHandlerService.register(user);
-        if (success) {
+        if (userHandlerService.register(user)) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else {
