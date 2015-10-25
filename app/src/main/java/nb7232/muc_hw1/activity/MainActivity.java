@@ -11,11 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
 import nb7232.muc_hw1.R;
-import nb7232.muc_hw1.model.Registration;
+import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
 import nb7232.muc_hw1.model.User;
+import nb7232.muc_hw1.model.UserHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_layout);
 
         SharedPreferences prefs = getSharedPreferences("preferences", MODE_PRIVATE);
-        Log.e("mainActivity", prefs.getString("email", "nemanista"));
         if (prefs.contains("email")) {
-            Log.e("Fragments", "juhej");
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             viewPager.setAdapter(new MainActivityFragmentSwitch(getSupportFragmentManager(),
                     MainActivity.this));
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dispatchTakePictureIntent() {
-        Log.e("Camera", "dispatch!");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -52,11 +50,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeSettings() {
-        Log.e("ChangeSettings", "Start");
+        Log.e("ChangingSetting", "start");
         User user = new User();
 
         EditText firstName = (EditText) findViewById(R.id.registration_first_name_editable);
-        if (user.setFirstName(firstName.getText().toString())) {
+        if (!user.setFirstName(firstName.getText().toString())) {
             firstName.setError(getResources().getString(R.string.registration_error_first_name));
         }
 
@@ -75,15 +73,19 @@ public class MainActivity extends AppCompatActivity {
             samplingInterval.setError(getResources().getString(R.string.settings_error_sampling_interval));
         }
 
-        Registration registrationService = new Registration(getSharedPreferences("preferences", MODE_PRIVATE));
-        registrationService.changeSettings(user);
+        UserHandler userHandlerService = new UserHandler(getSharedPreferences("preferences", MODE_PRIVATE));
+        if(userHandlerService.changeSettings(user)) {
+            Toast.makeText(getApplicationContext(),
+                    R.string.settings_change_success, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    R.string.settings_change_error, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("Camera", "returned");
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Log.e("Camera", "its All good");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             ImageView settingsView = (ImageView) findViewById(R.id.settings_image);

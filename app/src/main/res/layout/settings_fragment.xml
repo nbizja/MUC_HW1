@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_sampling_interval"/>
+            android:text="@string/settings_sampling_interval_text"/>
 
         <EditText
             android:layout_width="match_parent"

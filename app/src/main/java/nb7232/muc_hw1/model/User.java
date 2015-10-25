@@ -1,7 +1,6 @@
 package nb7232.muc_hw1.model;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 public class User {
 
@@ -10,13 +9,15 @@ public class User {
         FEMALE
     }
 
+    private String uuid;
     private String occupation;
     private Integer age;
     private String firstName;
     private String lastName;
     private String email;
     private Sex sex;
-    private String password;
+    private String rawPassword;
+    private String hashedPassword;
     private Integer samplingInterval;
     private boolean isValid;
 
@@ -28,6 +29,15 @@ public class User {
         return isValid;
     }
 
+    public boolean setUuid(String uuid) {
+        try {
+            UUID.fromString(uuid);
+            this.uuid = uuid;
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     public boolean setOccupation(String occupation) {
 
@@ -84,12 +94,21 @@ public class User {
         return true;
     }
 
-    public boolean setPassword(String password) {
+    public boolean setRawPassword(String password) {
         if (password.length() < 8 || password.length() > 16) {
             this.isValid = false;
             return false;
         }
-        this.password = password;
+        this.rawPassword = password;
+        return true;
+    }
+
+    public boolean setHashedPassword(String password) {
+        if (password.length() != 32) {
+            this.isValid = false;
+            return false;
+        }
+        this.hashedPassword = password;
         return true;
     }
 
@@ -102,38 +121,16 @@ public class User {
         return true;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRawPassword() {
+        return rawPassword;
     }
 
-    /**
-     * function md5 encryption for passwords
-     *
-     * @param password
-     * @return passwordEncrypted
-     * @link https://cmanios.wordpress.com/2012/03/19/android-md5-password-encryption/
-     */
-    private static final String md5(final String password) {
-        try {
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
 
-            MessageDigest digest = java.security.MessageDigest
-                    .getInstance("MD5");
-            digest.update(password.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++) {
-                String h = Integer.toHexString(0xFF & messageDigest[i]);
-                while (h.length() < 2)
-                    h = "0" + h;
-                hexString.append(h);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
+    public String getUuid() {
+        return uuid;
     }
 
     public String getOccupation() {

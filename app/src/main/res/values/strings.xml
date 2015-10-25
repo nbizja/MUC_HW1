@@ -21,6 +21,7 @@
     <string name="registration_error_invalid_email">Email is in wrong format!</string>
     <string name="registration_error_password_length">Password should be between 8 and 16 characters!</string>
     <string name="registration_error_password_match">Passwords don\'t match!</string>
+    <string name="registration_error_toast">Invalid input!</string>
 
     <string name="general_male">Male</string>
     <string name="general_female">Female</string>
@@ -36,9 +37,10 @@
     <string name="settings_photo_click">Click on the photo to activate the camera</string>
     <string name="settings_personal_detail">Your personal details:</string>
     <string name="settings_change_sampling">You can change sampling settings here.</string>
-    <string name="settings_sampling_interval">Sampling interval [minutes]</string>
+    <string name="settings_sampling_interval_text">Sampling interval [minutes]</string>
     <string name="settings_error_sampling_interval">Sampling interval must be positive number!</string>
-
+    <string name="settings_change_success">Settings changed!</string>
+    <string name="settings_change_error">Invalid input!</string>
 
     <string name="main_title_text">Signal mapper</string>
     <string name="main_summary_rssi_home_text">Average RSSI at home:</string>

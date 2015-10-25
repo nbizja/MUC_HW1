@@ -17,7 +17,6 @@ import nb7232.muc_hw1.fragment.SummaryFragment;
 public class MainActivityFragmentSwitch extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
-    private Context context;
 
     private ConnectionMapFragment connectionMapFragment = new ConnectionMapFragment();
     private SummaryFragment summaryFragment = new SummaryFragment();
@@ -26,7 +25,6 @@ public class MainActivityFragmentSwitch extends FragmentPagerAdapter {
 
     public MainActivityFragmentSwitch(FragmentManager fm, Context context) {
         super(fm);
-        this.context = context;
         this.tabTitles = new ArrayList<String>();
         this.tabTitles.add(0, context.getString(R.string.tab_map));
         this.tabTitles.add(1, context.getString(R.string.tab_summary));
