@@ -49,4 +49,12 @@
     <string name="main_summary_rssi_work_text">Average RSSI at home:</string>
     <string name="main_summary_strongest_ap_text">Strongest WiFi APs:</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="last_update_time_label">Last location update time</string>
+
+    <string name="start_updates">Start updates</string>
+    <string name="stop_updates">Stop updates</string>
+    <string name="location_updated_message">Location updated</string>
 </resources>
