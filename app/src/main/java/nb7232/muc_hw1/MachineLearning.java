@@ -7,10 +7,11 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import nb7232.muc_hw1.database.LocationDbHelper;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.MachineLearningManager;
-import si.uni_lj.fri.lrss.machinelearningtoolkit.classifier.Classifier;
+import si.uni_lj.fri.lrss.machinelearningtoolkit.classifier.DensityClustering;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.utils.ClassifierConfig;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.utils.Constants;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.utils.Feature;
@@ -21,9 +22,7 @@ import si.uni_lj.fri.lrss.machinelearningtoolkit.utils.MLException;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.utils.Signature;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.utils.Value;
 
-/**
- * Created by nejc on 7.11.2015.
- */
+
 public class MachineLearning extends IntentService{
 
     final public static String WORK = "work";
@@ -32,6 +31,7 @@ public class MachineLearning extends IntentService{
     private Context mContext;
 
     private MachineLearningManager mlm;
+    private LocationDbHelper ldh;
 
     public MachineLearning() {
         super("MachineLearning");
@@ -39,6 +39,8 @@ public class MachineLearning extends IntentService{
     @Override
     protected void onHandleIntent(Intent intent) {
         mContext = getApplicationContext();
+        ldh = new LocationDbHelper(mContext);
+
         try {
             Log.e("MachineLearning", "onHandleIntent");
             mlm = MachineLearningManager
@@ -46,8 +48,8 @@ public class MachineLearning extends IntentService{
 
             Log.e("MachineLearning", "configureMl");
             configureML();
-            Log.e("MachineLearning", "classificationTest");
-            clasificationTest();
+            //Log.e("MachineLearning", "classificationTest");
+            //clasificationTest();
         } catch (Exception e) {
             Log.e("MachineLearning", "Error instantiation MachineLearningManager");
         }
@@ -77,7 +79,7 @@ public class MachineLearning extends IntentService{
 
         try {
             Log.e("MachineLearning", "addclassifier");
-            Classifier cls = mlm.addClassifier(
+            DensityClustering cls = (DensityClustering) mlm.addClassifier(
                     Constants.TYPE_DENSITY_CLUSTER,
                     signature, config,
                     "location");
@@ -85,6 +87,13 @@ public class MachineLearning extends IntentService{
             Log.e("MachineLearning", "train!!!");
 
             cls.train(populateWithLabeledData());
+            HashMap<String, double[]> centroidMap = cls.getCentroids();
+            double[] homeCoordinates = centroidMap.get("home");
+            double[] workCoordinates = centroidMap.get("work");
+            ldh.updateCentroid("home", homeCoordinates[0], homeCoordinates[1]);
+            ldh.updateCentroid("work", workCoordinates[0], workCoordinates[1]);
+            Log.e("centroid", "home: "+homeCoordinates[0] + "," + homeCoordinates[1]);
+            Log.e("centroid", "work: "+workCoordinates[0] + "," + workCoordinates[1]);
 
         } catch (Exception e) {
             Log.e("configureML", e.getMessage());
@@ -94,8 +103,6 @@ public class MachineLearning extends IntentService{
     public ArrayList<Instance> populateWithLabeledData() {
         ArrayList<Instance> instanceQ = new ArrayList<Instance>();
 
-
-        LocationDbHelper ldh = new LocationDbHelper(mContext);
         String whereClause = "label IS NOT NULL";
         Cursor cursor = ldh.getReadableDatabase().query("location", null, whereClause, null,
                 null, null, null);
@@ -124,12 +131,10 @@ public class MachineLearning extends IntentService{
         Log.e("MachineLearning", "instance created!");
 
         try {
-
             Log.e("classificationTest",mlm.getClassifier("location").classify(instance).getValue().toString());
-            Log.e("MachineLearning", "the end");
-
         } catch (MLException mle) {
             Log.e("MachineLearning", mle.getMessage());
         }
     }
+
 }

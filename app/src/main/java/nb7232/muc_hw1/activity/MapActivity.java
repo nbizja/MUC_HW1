@@ -121,9 +121,9 @@ public class MapActivity extends AppCompatActivity {
         Intent intent = new Intent(ALARM_ACTION);
         PendingIntent pi = PendingIntent.getBroadcast(context, 1, intent, 0);
 
-        long periodMillis = 5*1000;
+        long periodMillis = 60*1000;
         long fireTime = SystemClock.elapsedRealtime() + periodMillis;
-
+        am.;
         am.setRepeating(AlarmManager.ELAPSED_REALTIME,fireTime,periodMillis,pi);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
