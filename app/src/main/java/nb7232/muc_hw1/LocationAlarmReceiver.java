@@ -95,8 +95,10 @@ public class LocationAlarmReceiver extends BroadcastReceiver implements
         saveIntent.putExtra("longitude", mCurrentLocation.getLongitude());
         saveIntent.putExtra("timestamp", DateFormat.getTimeInstance().format(new
                 Date(mCurrentLocation.getTime())));
-        context.startService(saveIntent);
-        Toast.makeText(context, "Alarm received; Intent dispatched", Toast.LENGTH_LONG).show();
+        //context.startService(saveIntent);
+        Toast.makeText(context, "Alarm received; Learn smrt", Toast.LENGTH_LONG).show();
+
+        MachineLearning machineLearning = new MachineLearning(context);
 
     }
 
