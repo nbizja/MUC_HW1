@@ -26,7 +26,6 @@ public class LocationDbHelper extends SQLiteOpenHelper {
     final public static String LABEL = "label";
     final public static String TIMESTAMP = "timestamp";
 
-    public String DB_PATH;
     private Context mContext;
 
     final private static String CMD = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
