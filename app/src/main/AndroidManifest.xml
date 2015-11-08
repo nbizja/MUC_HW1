@@ -54,7 +54,8 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="ALARM_ACTION" />
+                <action android:name="DAY_SAMPLING" />
+                <action android:name="NIGHT_SAMPLING" />
             </intent-filter>
         </receiver>
         <service

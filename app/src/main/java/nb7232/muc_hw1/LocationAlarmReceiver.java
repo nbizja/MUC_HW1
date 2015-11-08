@@ -16,6 +16,8 @@ import com.google.android.gms.location.LocationServices;
 import java.text.DateFormat;
 import java.util.Date;
 
+import nb7232.muc_hw1.activity.MapActivity;
+
 /**
  * Created by nejc on 6.11.2015.
  */
@@ -77,11 +79,13 @@ public class LocationAlarmReceiver extends BroadcastReceiver implements
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("onReceive", "Intent: "+intent.getAction());
+        if (MapActivity.checkAlarm(context, intent)) {
+            this.context = context;
+            buildGoogleApiClient(context.getApplicationContext());
+            mGoogleApiClient.connect();
+        }
 
-        this.context = context;
-        Log.e("onReceive", "Looking good!");
-        buildGoogleApiClient(context.getApplicationContext());
-        mGoogleApiClient.connect();
     }
 
     private void displayToast() {
@@ -98,9 +102,9 @@ public class LocationAlarmReceiver extends BroadcastReceiver implements
         saveIntent.putExtra("timestamp", DateFormat.getTimeInstance().format(new
                 Date(mCurrentLocation.getTime())));
         context.startService(saveIntent);
-        Toast.makeText(context, "Alarm received; Learn smrt", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Alarm received; Learn smth", Toast.LENGTH_LONG).show();
 
-       // MachineLearning machineLearning = new MachineLearning(context);
+        // MachineLearning machineLearning = new MachineLearning(context);
 
     }
 
