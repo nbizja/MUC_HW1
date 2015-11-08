@@ -17,7 +17,7 @@ public class SamplingManager extends BroadcastReceiver {
 
     public static final String DAY_SAMPLING = "work";
     public static final int DAY_SAMPLING_START_HOUR = 9;
-    public static final int DAY_SAMPLING_END_HOUR = 17;
+    public static final int DAY_SAMPLING_END_HOUR = 20;
 
 
     @Override
@@ -64,15 +64,15 @@ public class SamplingManager extends BroadcastReceiver {
     public static void startSampling(Context context, String label, int dayHour, int minuteInterval) {
         Log.e("SamplingManager", "startSampling: " + label);
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent nightSampling = new Intent(label);
-        nightSampling.putExtra("label", label);
-        PendingIntent nightSamplingPi = PendingIntent.getBroadcast(context, 1, nightSampling, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent sampling = new Intent(label);
+        sampling.putExtra("label", label);
+        PendingIntent samplingPi = PendingIntent.getBroadcast(context, 1, sampling, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, dayHour);
         calendar.set(Calendar.MINUTE, 0);
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 6, nightSamplingPi);
+                1000 * 6, samplingPi);
     }
 }

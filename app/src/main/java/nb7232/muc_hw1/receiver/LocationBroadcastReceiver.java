@@ -15,7 +15,6 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import nb7232.muc_hw1.service.LocationService;
-import nb7232.muc_hw1.receiver.SamplingManager;
 
 public class LocationBroadcastReceiver extends BroadcastReceiver implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -24,6 +23,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver implements
     protected GoogleApiClient mGoogleApiClient;
     protected Location mCurrentLocation;
     protected Context context;
+    private String label;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,17 +31,19 @@ public class LocationBroadcastReceiver extends BroadcastReceiver implements
         if (SamplingManager.checkAlarm(context, intent)) {
             Log.e("onReceive", "alarm ok! " );
             this.context = context;
+            label = intent.getStringExtra("label");
             buildGoogleApiClient(context.getApplicationContext());
             mGoogleApiClient.connect();
         }
     }
 
-    private void sampleLocation() {
+    private void sampleLocation(String label) {
         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mCurrentLocation != null) {
             Intent saveIntent = new Intent(context, LocationService.class);
             saveIntent.putExtra("latitude", mCurrentLocation.getLatitude());
             saveIntent.putExtra("longitude", mCurrentLocation.getLongitude());
+            saveIntent.putExtra("label", label);
             saveIntent.putExtra("timestamp", DateFormat.getTimeInstance().format(new
                     Date(mCurrentLocation.getTime())));
             context.startService(saveIntent);
@@ -60,7 +62,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver implements
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
-        sampleLocation();
+        sampleLocation(label);
     }
 
     @Override

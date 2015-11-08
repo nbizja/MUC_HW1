@@ -90,7 +90,7 @@ public class MachineLearning extends IntentService{
         locationValues.add(WORK);
         locationValues.add(HOME);
         Log.e("MachineLearning", "featureNormal");
-        Feature location = new FeatureNominal("location", locationValues);
+        Feature location = new FeatureNominal("label", locationValues);
         ArrayList<Feature> features = new ArrayList<Feature>();
         features.add(longitude);
         features.add(latitude);
@@ -108,7 +108,7 @@ public class MachineLearning extends IntentService{
             DensityClustering cls = (DensityClustering) mlm.addClassifier(
                     Constants.TYPE_DENSITY_CLUSTER,
                     signature, config,
-                    "location");
+                    "label");
 
             Log.e("MachineLearning", "train!!!");
 
@@ -127,14 +127,14 @@ public class MachineLearning extends IntentService{
         ArrayList<Instance> instanceQ = new ArrayList<Instance>();
 
         String whereClause = "label IS NOT NULL";
-        Cursor cursor = locationDbHelper.getDb().query("location", null, whereClause, null,
-                null, null, null);
+        Cursor cursor = locationDbHelper.getDb().rawQuery("SELECT * FROM location",null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
+            Log.e("getLabeledData", cursor.getString(cursor.getColumnIndex("label"))+": "+cursor.getDouble(cursor.getColumnIndex("latitude")) + " " + cursor.getDouble(cursor.getColumnIndex("longitude")));
             ArrayList<Value> instanceValues = new ArrayList<Value>();
             instanceValues.add(new Value(cursor.getDouble(cursor.getColumnIndex("latitude")), Value.NUMERIC_VALUE));
-            instanceValues.add(new Value(cursor.getDouble(cursor.getColumnIndex("latitude")), Value.NUMERIC_VALUE));
+            instanceValues.add(new Value(cursor.getDouble(cursor.getColumnIndex("longitude")), Value.NUMERIC_VALUE));
             instanceValues.add(new Value(cursor.getString(cursor.getColumnIndex("label")), Value.NOMINAL_VALUE));
 
             instanceQ.add(new Instance(instanceValues));
