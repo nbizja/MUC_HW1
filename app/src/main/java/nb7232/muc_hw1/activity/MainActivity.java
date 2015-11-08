@@ -17,10 +17,12 @@ import nb7232.muc_hw1.R;
 import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
 import nb7232.muc_hw1.model.User;
 import nb7232.muc_hw1.model.UserHandler;
+import nb7232.muc_hw1.receiver.SamplingManager;
 
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final String START_SAMPLING = "start_sampling";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +31,23 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("preferences", MODE_PRIVATE);
         if (prefs.contains("email")) {
+            Log.e("MainActivity", "tiggerSampling");
+            triggerSampling();
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             viewPager.setAdapter(new MainActivityFragmentSwitch(getSupportFragmentManager(),
                     MainActivity.this));
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
             tabLayout.setupWithViewPager(viewPager);
-
         } else {
             Intent intent = new Intent(this, RegistrationActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void triggerSampling() {
+        Intent samplingIntent = new Intent(START_SAMPLING);
+        sendBroadcast(samplingIntent);
     }
 
     public void dispatchTakePictureIntent() {
@@ -50,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeSettings() {
-        Log.e("ChangingSetting", "start");
         User user = new User();
 
         EditText firstName = (EditText) findViewById(R.id.registration_first_name_editable);
@@ -74,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         UserHandler userHandlerService = new UserHandler(getSharedPreferences("preferences", MODE_PRIVATE));
-        if(userHandlerService.changeSettings(user)) {
+        if (userHandlerService.changeSettings(user)) {
             Toast.makeText(getApplicationContext(),
                     R.string.settings_change_success, Toast.LENGTH_LONG).show();
         } else {

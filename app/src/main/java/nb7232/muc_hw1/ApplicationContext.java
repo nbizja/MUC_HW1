@@ -4,9 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-/**
- * Created by nejc on 6.11.2015.
- */
+
 public class ApplicationContext extends Application {
 
     private static Context instance;

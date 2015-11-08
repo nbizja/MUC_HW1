@@ -1,13 +1,19 @@
-package nb7232.muc_hw1;
+package nb7232.muc_hw1.service;
 
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import nb7232.muc_hw1.database.LocationDbHelper;
 import si.uni_lj.fri.lrss.machinelearningtoolkit.MachineLearningManager;
@@ -28,34 +34,50 @@ public class MachineLearning extends IntentService{
     final public static String WORK = "work";
     final public static String HOME = "home";
 
-    private Context mContext;
-
     private MachineLearningManager mlm;
-    private LocationDbHelper ldh;
+    private LocationDbHelper locationDbHelper;
 
     public MachineLearning() {
         super("MachineLearning");
     }
     @Override
     protected void onHandleIntent(Intent intent) {
-        mContext = getApplicationContext();
-        ldh = new LocationDbHelper(mContext);
-
+        locationDbHelper = new LocationDbHelper(getApplicationContext());
+        locationDbHelper.open();
         try {
             Log.e("MachineLearning", "onHandleIntent");
             mlm = MachineLearningManager
-                    .getMLManager(mContext);
-
+                    .getMLManager(this);
+            HashMap<String, double[]> centroidMap = learn(getLabeledData());
+            updateLocations(centroidMap);
             Log.e("MachineLearning", "configureMl");
-            configureML();
-            //Log.e("MachineLearning", "classificationTest");
             //clasificationTest();
         } catch (Exception e) {
-            Log.e("MachineLearning", "Error instantiation MachineLearningManager");
+            Log.e("MachineLearning", e.getMessage());
         }
     }
 
-    public void configureML() {
+    private void updateLocations(HashMap<String, double[]> centroidMap) {
+        JSONArray locationsArray = new JSONArray();
+        for(Map.Entry<String, double[]> location : centroidMap.entrySet()) {
+            try {
+                JSONObject locationsJson = new JSONObject();
+                locationsJson.put("label",location.getKey());
+                locationsJson.put("latitude",location.getValue()[0]);
+                locationsJson.put("longitude",location.getValue()[1]);
+                locationsArray.put(locationsJson);
+            } catch (JSONException je) {
+                Log.e("updateLocations", je.getMessage());
+            }
+            locationDbHelper.updateCentroid(location.getKey(), location.getValue()[0], location.getValue()[1]);
+        }
+        SharedPreferences prefs = getSharedPreferences("preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("locations", locationsArray.toString());
+
+    }
+
+    public HashMap<String, double[]> learn(ArrayList<Instance> instances) {
         Log.e("MachineLearning", "configureML()");
 
         Feature longitude = new FeatureNumeric("longitude");
@@ -86,25 +108,22 @@ public class MachineLearning extends IntentService{
 
             Log.e("MachineLearning", "train!!!");
 
-            cls.train(populateWithLabeledData());
-            HashMap<String, double[]> centroidMap = cls.getCentroids();
-            double[] homeCoordinates = centroidMap.get("home");
-            double[] workCoordinates = centroidMap.get("work");
-            ldh.updateCentroid("home", homeCoordinates[0], homeCoordinates[1]);
-            ldh.updateCentroid("work", workCoordinates[0], workCoordinates[1]);
-            Log.e("centroid", "home: "+homeCoordinates[0] + "," + homeCoordinates[1]);
-            Log.e("centroid", "work: "+workCoordinates[0] + "," + workCoordinates[1]);
+            cls.train(instances);
+            Log.e("MachineLearning", "train completed");
+
+            return cls.getCentroids();
 
         } catch (Exception e) {
             Log.e("configureML", e.getMessage());
         }
+        return null;
     }
 
-    public ArrayList<Instance> populateWithLabeledData() {
+    public ArrayList<Instance> getLabeledData() {
         ArrayList<Instance> instanceQ = new ArrayList<Instance>();
 
         String whereClause = "label IS NOT NULL";
-        Cursor cursor = ldh.getReadableDatabase().query("location", null, whereClause, null,
+        Cursor cursor = locationDbHelper.getDb().query("location", null, whereClause, null,
                 null, null, null);
 
         cursor.moveToFirst();

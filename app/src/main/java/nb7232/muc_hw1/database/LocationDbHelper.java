@@ -3,6 +3,7 @@ package nb7232.muc_hw1.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.format.DateFormat;
@@ -52,17 +53,26 @@ public class LocationDbHelper extends SQLiteOpenHelper {
         Log.e("LocationDbHelper", "Creating database: " + LOCATION_TABLE);
         db.execSQL(LOCATION_TABLE);
         db.execSQL(CENTROID_TABLE);
-        try {
+       /* try {
             populateDatabase(db, R.raw.home_samples);
             populateDatabase(db, R.raw.work_samples);
         } catch (IOException ioe) {
             Log.e("LocationDbHelper", "File does not exist!");
         }
+        */
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void open() throws SQLException {
+        db = getWritableDatabase();
+    }
+
+    public SQLiteDatabase getDb() {
+        return db;
     }
 
     public void populateDatabase(SQLiteDatabase db, int resourceId) throws IOException {
