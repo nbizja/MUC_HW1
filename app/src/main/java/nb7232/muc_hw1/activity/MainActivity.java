@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("preferences", MODE_PRIVATE);
         if (prefs.contains("email")) {
-            Log.e("MainActivity", "tiggerSampling");
+            Log.e("MainActivity", "triggerSampling");
             triggerSampling();
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             viewPager.setAdapter(new MainActivityFragmentSwitch(getSupportFragmentManager(),

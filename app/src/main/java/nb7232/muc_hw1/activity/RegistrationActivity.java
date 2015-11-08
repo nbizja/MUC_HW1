@@ -36,58 +36,64 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void setUser() {
-        User user = new User();
-        EditText occupation = (EditText) findViewById(R.id.registration_occupation_editable);
-        if (!user.setOccupation(occupation.getText().toString())) {
-            occupation.setError(getResources().getString(R.string.registration_error_occupation));
-        }
+        try {
+            User user = new User();
+            EditText occupation = (EditText) findViewById(R.id.registration_occupation_editable);
+            if (!user.setOccupation(occupation.getText().toString())) {
+                occupation.setError(getResources().getString(R.string.registration_error_occupation));
+            }
 
-        EditText age = (EditText) findViewById(R.id.registration_age_editable);
-        if (!user.setAge(Integer.parseInt(age.getText().toString()))) {
-            age.setError(getResources().getString(R.string.registration_error_age));
-        }
+            EditText age = (EditText) findViewById(R.id.registration_age_editable);
+            if (!user.setAge(Integer.parseInt(age.getText().toString()))) {
+                age.setError(getResources().getString(R.string.registration_error_age));
+            }
 
-        EditText firstName = (EditText) findViewById(R.id.registration_first_name_editable);
-        if (!user.setFirstName(firstName.getText().toString())) {
-            firstName.setError(getResources().getString(R.string.registration_error_first_name));
-        }
+            EditText firstName = (EditText) findViewById(R.id.registration_first_name_editable);
+            if (!user.setFirstName(firstName.getText().toString())) {
+                firstName.setError(getResources().getString(R.string.registration_error_first_name));
+            }
 
-        EditText lastName = (EditText) findViewById(R.id.registration_last_name_editable);
-        if (!user.setLastName(lastName.getText().toString())) {
-            lastName.setError(getResources().getString(R.string.registration_error_last_name));
-        }
+            EditText lastName = (EditText) findViewById(R.id.registration_last_name_editable);
+            if (!user.setLastName(lastName.getText().toString())) {
+                lastName.setError(getResources().getString(R.string.registration_error_last_name));
+            }
 
-        EditText email = (EditText) findViewById(R.id.registration_email_editable);
-        if (!user.setEmail(email.getText().toString())) {
-            email.setError(getResources().getString(R.string.registration_error_invalid_email));
-        }
+            EditText email = (EditText) findViewById(R.id.registration_email_editable);
+            if (!user.setEmail(email.getText().toString())) {
+                email.setError(getResources().getString(R.string.registration_error_invalid_email));
+            }
 
-        RadioGroup radioGr = (RadioGroup) findViewById(R.id.registration_sex);
-        RadioButton selectedSex = (RadioButton) findViewById(radioGr.getCheckedRadioButtonId());
-        if (selectedSex.getId() == R.id.registration_male_radio) {
-            user.setSex(User.Sex.MALE);
-        } else {
-            user.setSex(User.Sex.FEMALE);
-        }
+            RadioGroup radioGr = (RadioGroup) findViewById(R.id.registration_sex);
+            RadioButton selectedSex = (RadioButton) findViewById(radioGr.getCheckedRadioButtonId());
+            if (selectedSex.getId() == R.id.registration_male_radio) {
+                user.setSex(User.Sex.MALE);
+            } else {
+                user.setSex(User.Sex.FEMALE);
+            }
 
-        EditText password = (EditText) findViewById(R.id.registration_password_editable);
-        if (!user.setRawPassword(password.getText().toString())) {
-            password.setError(getResources().getString(R.string.registration_error_password_length));
-        }
-        EditText password2 = (EditText) findViewById(R.id.registration_password_editable2);
-        if (!password.getText().toString().equals(password2.getText().toString())) {
-            user.setRawPassword("");
-            password2.setError(getResources().getString(R.string.registration_error_password_match));
-        }
+            EditText password = (EditText) findViewById(R.id.registration_password_editable);
+            if (!user.setRawPassword(password.getText().toString())) {
+                password.setError(getResources().getString(R.string.registration_error_password_length));
+            }
+            EditText password2 = (EditText) findViewById(R.id.registration_password_editable2);
+            if (!password.getText().toString().equals(password2.getText().toString())) {
+                user.setRawPassword("");
+                password2.setError(getResources().getString(R.string.registration_error_password_match));
+            }
 
-        UserHandler userHandlerService = new UserHandler(getSharedPreferences("preferences", MODE_PRIVATE));
-        if (userHandlerService.register(user)) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else {
+            UserHandler userHandlerService = new UserHandler(getSharedPreferences("preferences", MODE_PRIVATE));
+            if (userHandlerService.register(user)) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        R.string.registration_error_toast, Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(),
                     R.string.registration_error_toast, Toast.LENGTH_LONG).show();
         }
+
     }
 
 

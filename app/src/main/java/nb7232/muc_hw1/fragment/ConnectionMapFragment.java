@@ -28,23 +28,31 @@ public class ConnectionMapFragment extends SupportMapFragment {
         super();
     }
     private GoogleMap googleMap;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        context = inflater.getContext();
         googleMap = getMap();
         Log.e("MapFragment", "adding markers");
-        addMarkers(inflater.getContext());
+        addMarkers();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        syncMarkers();
     }
 
-    private void addMarkers(Context context) {
+    private void syncMarkers() {
+        googleMap.clear();
+        addMarkers();
+    }
+
+    private void addMarkers() {
         SharedPreferences prefs = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         Log.e("MapFragment", prefs.getString("locations","nickaj"));
         try{
