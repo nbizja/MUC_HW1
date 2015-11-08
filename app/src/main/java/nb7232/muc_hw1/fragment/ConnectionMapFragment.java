@@ -36,7 +36,7 @@ public class ConnectionMapFragment extends SupportMapFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         context = inflater.getContext();
         googleMap = getMap();
-        Log.e("MapFragment", "adding markers");
+        //Log.e("MapFragment", "adding markers");
         addMarkers();
         return view;
     }
@@ -52,11 +52,17 @@ public class ConnectionMapFragment extends SupportMapFragment {
         addMarkers();
     }
 
+    /**
+     * Gets location data from shared preferences and displays it on map
+     */
     private void addMarkers() {
         SharedPreferences prefs = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        Log.e("MapFragment", prefs.getString("locations","nickaj"));
+
         try{
-            JSONArray locations = new JSONArray(prefs.getString("locations",""));
+            JSONArray defaultLocation = new JSONArray();
+            defaultLocation.put(new JSONObject().put("latitude", 46.0762662).put("longitude",14.5093724).put("label", "home"));
+            defaultLocation.put(new JSONObject().put("latitude", 46.049840).put("longitude",14.468701).put("label", "work"));
+            JSONArray locations = new JSONArray(prefs.getString("locations",defaultLocation.toString()));
             for(int i = 0; i < locations.length(); i++) {
                 googleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(locations.getJSONObject(i).getDouble("latitude"), locations.getJSONObject(i).getDouble("longitude")))

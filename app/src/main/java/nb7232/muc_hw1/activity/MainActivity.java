@@ -3,15 +3,12 @@ package nb7232.muc_hw1.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,7 +20,6 @@ import nb7232.muc_hw1.R;
 import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
 import nb7232.muc_hw1.model.User;
 import nb7232.muc_hw1.model.UserHandler;
-import nb7232.muc_hw1.receiver.SamplingManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("preferences", MODE_PRIVATE);
         if (prefs.contains("email")) {
-            Log.e("MainActivity", "triggerSampling");
+            //Log.e("MainActivity", "triggerSampling");
+            /**
+             * After registration, sampling is triggered via broadcast
+             */
             triggerSampling();
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             viewPager.setAdapter(new MainActivityFragmentSwitch(getSupportFragmentManager(),
@@ -51,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Broadcast intent for sampling. Receiver: sampling manager.
+     */
     public void triggerSampling() {
         Intent samplingIntent = new Intent(START_SAMPLING);
         sendBroadcast(samplingIntent);
@@ -96,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Save image to internal storage
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -107,11 +112,10 @@ public class MainActivity extends AppCompatActivity {
                     Environment.getExternalStorageDirectory() + "/fri/");
             storagePath.mkdirs();
             File myImage = new File(storagePath, "avatar.jpg");
-            Bitmap b = Bitmap.createScaledBitmap(imageBitmap, 320, 480, false);
+            Bitmap b = Bitmap.createScaledBitmap(imageBitmap, 480, 320, false);
 
             try {
                 FileOutputStream out = new FileOutputStream(myImage);
-                b.compress(Bitmap.CompressFormat.JPEG, 80, out);
                 out.flush();
                 out.close();
             } catch (Exception e) {

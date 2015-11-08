@@ -53,13 +53,13 @@ public class LocationDbHelper extends SQLiteOpenHelper {
         Log.e("LocationDbHelper", "Creating database: " + LOCATION_TABLE);
         db.execSQL(LOCATION_TABLE);
         db.execSQL(CENTROID_TABLE);
-       /* try {
+        /*try {
             populateDatabase(db, R.raw.home_samples);
             populateDatabase(db, R.raw.work_samples);
         } catch (IOException ioe) {
             Log.e("LocationDbHelper", "File does not exist!");
-        }
-        */
+        }*/
+
     }
 
     @Override
@@ -86,25 +86,15 @@ public class LocationDbHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Parses .sql file
+     * @param resourceId
+     * @return
+     * @throws IOException
+     */
     private String sqlFileToString(int resourceId) throws IOException {
         InputStream mInput = mContext.getResources().openRawResource(resourceId);
         String sqlString = new Scanner(mInput, "UTF-8").useDelimiter("\\A").next();
         return sqlString;
-    }
-
-    public void updateCentroid(String label, double latitude, double longitude) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("latitude", latitude);
-        contentValues.put("longitude", longitude);
-        contentValues.put("label", label);
-        contentValues.put("timestamp", java.text.DateFormat.getTimeInstance().format(new
-                Date()));
-
-        Cursor c = db.query("centroid", null, "label = ?", new String[]{label},null,null,null);
-        if (c.getCount() == 0) {
-            db.insert("centroid", null, contentValues);
-        } else {
-            db.update("centroid", contentValues, "label=?", new String[]{label});
-        }
     }
 }

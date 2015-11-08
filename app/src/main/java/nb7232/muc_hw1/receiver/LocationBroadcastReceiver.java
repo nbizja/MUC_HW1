@@ -16,6 +16,9 @@ import java.util.Date;
 
 import nb7232.muc_hw1.service.LocationService;
 
+/**
+ * Class receives alarm signal configured in SamplingManager
+ */
 public class LocationBroadcastReceiver extends BroadcastReceiver implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -29,7 +32,7 @@ public class LocationBroadcastReceiver extends BroadcastReceiver implements
     public void onReceive(Context context, Intent intent) {
         Log.e("onReceive", "Intent: " + intent.getAction());
         if (SamplingManager.checkAlarm(context, intent)) {
-            Log.e("onReceive", "alarm ok! " );
+            Log.e("onReceive", "alarm ok! ");
             this.context = context;
             label = intent.getStringExtra("label");
             buildGoogleApiClient(context.getApplicationContext());
@@ -37,6 +40,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver implements
         }
     }
 
+    /**
+     * Gets coordinates from FusedLocationApi and sends it to LocationService
+     *
+     * @param label work/home
+     */
     private void sampleLocation(String label) {
         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mCurrentLocation != null) {
