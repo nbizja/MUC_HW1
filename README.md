@@ -14,3 +14,6 @@ Work sampling from 09:00 to 16:00
 Sampling interval 10 minutes
 Machine learning interval: 100 samples
 Default locations: FRI (work), Dunajska cesta (home)
+
+One dataset can be preloaded by uncommenting few lines in onCreate method in LocationDbHelper.
+Dataset contains samples from Ljubljana and Laško. Some
