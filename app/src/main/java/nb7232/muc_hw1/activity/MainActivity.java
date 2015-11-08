@@ -3,15 +3,21 @@ package nb7232.muc_hw1.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import nb7232.muc_hw1.R;
 import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
@@ -92,9 +98,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            File storagePath = new File(
+                    Environment.getExternalStorageDirectory() + "/fri/");
+            storagePath.mkdirs();
+            File myImage = new File(storagePath, "avatar.jpg");
+            Bitmap b = Bitmap.createScaledBitmap(imageBitmap, 320, 480, false);
+
+            try {
+                FileOutputStream out = new FileOutputStream(myImage);
+                b.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             ImageView settingsView = (ImageView) findViewById(R.id.settings_image);
             settingsView.setBackgroundResource(0);
             settingsView.setRotation(90);
