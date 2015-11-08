@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import nb7232.muc_hw1.database.LocationDbHelper;
+import nb7232.muc_hw1.receiver.SamplingManager;
 
 /**
  * Receives location data and label from LocationBroadcastReceiver and saves it to DB.
@@ -31,8 +32,8 @@ public class LocationService extends IntentService {
         long id = locationDbHelper.getDb().insert(LocationDbHelper.TABLE_NAME, null, row);
         //Log.e("LocationService", "id vrstice: " + id);
         SharedPreferences prefs = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        ;
-        if (id % 100 == 0) {
+
+        if (id % SamplingManager.MACHINE_LEARNING_INTERVAL == 0) {
             Intent saveIntent = new Intent(getApplicationContext(), MachineLearning.class);
             getApplicationContext().startService(saveIntent);
         }

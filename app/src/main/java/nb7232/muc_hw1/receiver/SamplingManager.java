@@ -20,6 +20,10 @@ public class SamplingManager extends BroadcastReceiver {
     public static final int DAY_SAMPLING_END_HOUR = 16;
 
     public static final int SAMPLING_MINUTE_INTERVAL = 10;
+    /**
+     * On how many new samples should locations be recalculated.
+     */
+    public static final int MACHINE_LEARNING_INTERVAL = 100;
 
     /**
      * Night and day alarms are set
