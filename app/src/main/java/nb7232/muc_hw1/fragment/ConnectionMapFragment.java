@@ -34,7 +34,8 @@ public class ConnectionMapFragment extends SupportMapFragment {
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
         googleMap = getMap();
-
+        Log.e("MapFragment", "adding markers");
+        addMarkers(inflater.getContext());
         return view;
     }
 
@@ -45,6 +46,7 @@ public class ConnectionMapFragment extends SupportMapFragment {
 
     private void addMarkers(Context context) {
         SharedPreferences prefs = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        Log.e("MapFragment", prefs.getString("locations","nickaj"));
         try{
             JSONArray locations = new JSONArray(prefs.getString("locations",""));
             for(int i = 0; i < locations.length(); i++) {

@@ -59,6 +59,7 @@ public class MachineLearning extends IntentService{
 
     private void updateLocations(HashMap<String, double[]> centroidMap) {
         JSONArray locationsArray = new JSONArray();
+        Log.e("updateLocations", "Starting update");
         for(Map.Entry<String, double[]> location : centroidMap.entrySet()) {
             try {
                 JSONObject locationsJson = new JSONObject();
@@ -69,11 +70,14 @@ public class MachineLearning extends IntentService{
             } catch (JSONException je) {
                 Log.e("updateLocations", je.getMessage());
             }
+            Log.e("updateLocations", "updateCentroid()");
             locationDbHelper.updateCentroid(location.getKey(), location.getValue()[0], location.getValue()[1]);
         }
         SharedPreferences prefs = getSharedPreferences("preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        Log.e("updateLocations", locationsArray.toString());
         editor.putString("locations", locationsArray.toString());
+        editor.commit();
 
     }
 
