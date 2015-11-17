@@ -1,20 +1,14 @@
 package nb7232.muc_hw1.database;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.Scanner;
-
-import nb7232.muc_hw1.R;
 
 /**
  * Created by nejc on 7.11.2015.
@@ -34,13 +28,17 @@ public class LocationDbHelper extends SQLiteOpenHelper {
     private Context mContext;
     private SQLiteDatabase db;
 
-    final private static String LOCATION_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            LATITUDE + " REAL NOT NULL, " + LONGITUDE + " REAL NOT NULL, " +
-            LABEL + " TEXT, " +
-            TIMESTAMP + " TEXT NOT NULL)";
+    final private static String LOCATION_TABLE = "CREATE TABLE location (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "trigger_id INTEGER NOT NULL" +
+            "latitude REAL NOT NULL, longitutde REAL NOT NULL, " +
+            "label TEXT, " +
+            "timestamp TEXT NOT NULL)";
 
     final private static String CENTROID_TABLE = "CREATE TABLE centroid (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "latitude REAL NOT NULL, longitude REAL NOT NULL, label TEXT, timestamp TEXT NOT NULL)";
+
+    final private static String WIFI_TABLE = "CREATE TABLE wifi (id INTEGER PRIMARY KEY AUTOINCREMENT, trigger_id INTEGER" +
+            "ssid TEXT NOT NULL, bssid TEXT NOT NULL, rssi INTEGER NOT NULL, timestamp TEXT NOT NULL)";
 
     public LocationDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,6 +51,7 @@ public class LocationDbHelper extends SQLiteOpenHelper {
         Log.e("LocationDbHelper", "Creating database: " + LOCATION_TABLE);
         db.execSQL(LOCATION_TABLE);
         db.execSQL(CENTROID_TABLE);
+        db.execSQL(WIFI_TABLE);
         /*try {
             populateDatabase(db, R.raw.home_samples);
             populateDatabase(db, R.raw.work_samples);
