@@ -84,7 +84,7 @@ public class LocationService extends IntentService implements
                 row.put(LocationDbHelper.LABEL, intent.getStringExtra("label"));
             }
             long id = locationDbHelper.getDb().insert(LocationDbHelper.TABLE_NAME, null, row);
-            Log.e("SampledLocation", "id: " + id + "; trigger_id: " + intent.getIntExtra("trigger_id", 0));
+            Log.e("SampledLocation", "id: " + id + "; trigger_id: " + intent.getIntExtra("trigger_id", 0) + " label: "+ classify(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
 
             if (id % SamplingManager.MACHINE_LEARNING_INTERVAL == 0) {
                 Intent saveIntent = new Intent(getApplicationContext(), MachineLearning.class);

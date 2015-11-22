@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/summary">
 
     <LinearLayout
         android:orientation="vertical"
@@ -15,11 +16,21 @@
             android:id="@+id/summary_fragment_rssi_home"
             android:text="@string/main_summary_rssi_home_text"/>
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rssi_home"
+            android:visibility="invisible"/>
+        <TextView
             android:paddingTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/summary_fragment_rssi_work"
             android:text="@string/main_summary_rssi_work_text"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rssi_work"
+            android:visibility="invisible"/>
         <TextView
             android:paddingTop="10dp"
             android:layout_width="match_parent"
