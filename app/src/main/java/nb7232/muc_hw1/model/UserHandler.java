@@ -32,7 +32,7 @@ public class UserHandler {
         editor.putString("sex", user.getSex().toString());
         editor.putString("device", Build.BRAND + " " + Build.MODEL);
         editor.putLong("timestamp", Calendar.getInstance().getTimeInMillis());
-        editor.putInt("sampling_interval", 15);
+        editor.putInt("sampling_interval", 1);
         editor.commit();
 
         return true;

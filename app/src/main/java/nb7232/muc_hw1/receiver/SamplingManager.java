@@ -5,11 +5,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.Calendar;
+public class SamplingManager extends BroadcastReceiver{
 
-public class SamplingManager extends BroadcastReceiver {
+    public static final String REGULAR_SAMPLING = "regular_sampling";
 
     public static final String NIGHT_SAMPLING = "home";
     public static final int NIGHT_SAMPLING_START_HOUR = 1;
@@ -19,7 +21,6 @@ public class SamplingManager extends BroadcastReceiver {
     public static final int DAY_SAMPLING_START_HOUR = 9;
     public static final int DAY_SAMPLING_END_HOUR = 16;
 
-    public static final int SAMPLING_MINUTE_INTERVAL = 10;
     /**
      * On how many new samples should locations be recalculated.
      */
@@ -33,8 +34,27 @@ public class SamplingManager extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        startSampling(context, DAY_SAMPLING, DAY_SAMPLING_START_HOUR, 1);
-        startSampling(context, NIGHT_SAMPLING, NIGHT_SAMPLING_START_HOUR, 1);
+
+        int sampling_minute_interval = getSamplingInterval(context);
+        Log.e("SamplingManager", "sampling_minute_interval: "+sampling_minute_interval);
+        if (hasLearned(context) || true) {
+            startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
+        } else {
+            startSampling(context, DAY_SAMPLING, DAY_SAMPLING_START_HOUR, sampling_minute_interval);
+            startSampling(context, NIGHT_SAMPLING, NIGHT_SAMPLING_START_HOUR, sampling_minute_interval);
+        }
+
+    }
+
+    public static boolean hasLearned(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        String locations = prefs.getString("locations", "");
+        return locations != "";
+    }
+
+    public static int getSamplingInterval(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        return prefs.getInt("sampling_interval", 1);
     }
 
     /**
@@ -48,24 +68,30 @@ public class SamplingManager extends BroadcastReceiver {
     public static boolean checkAlarm(Context context, Intent intent) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        if (intent.getAction().equals(DAY_SAMPLING)) {
+        int sampling_minute_interval = getSamplingInterval(context);
+
+        if (hasLearned(context) ||true) {
+            //startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
+            //cancelSampling(context, DAY_SAMPLING);
+            //cancelSampling(context, NIGHT_SAMPLING);
+            return true;
+        } else if (intent.getAction().equals(DAY_SAMPLING)) {
             if (calendar.get(Calendar.HOUR_OF_DAY) > DAY_SAMPLING_END_HOUR) {
                 cancelSampling(context, DAY_SAMPLING);
-                startSampling(context, NIGHT_SAMPLING, NIGHT_SAMPLING_START_HOUR, SAMPLING_MINUTE_INTERVAL);
+                startSampling(context, NIGHT_SAMPLING, NIGHT_SAMPLING_START_HOUR, sampling_minute_interval);
                 return false;
             } else if (calendar.get(Calendar.HOUR_OF_DAY) < DAY_SAMPLING_START_HOUR) {
                 cancelSampling(context, DAY_SAMPLING);
                 return false;
             }
-        }
-        if (intent.getAction().equals(NIGHT_SAMPLING)) {
+        } else if (intent.getAction().equals(NIGHT_SAMPLING)) {
             if (calendar.get(Calendar.HOUR_OF_DAY) > NIGHT_SAMPLING_END_HOUR) {
                 cancelSampling(context, NIGHT_SAMPLING);
                 return false;
 
             } else if (calendar.get(Calendar.HOUR_OF_DAY) < NIGHT_SAMPLING_START_HOUR) {
                 cancelSampling(context, DAY_SAMPLING);
-                startSampling(context, DAY_SAMPLING, DAY_SAMPLING_START_HOUR, SAMPLING_MINUTE_INTERVAL);
+                startSampling(context, DAY_SAMPLING, DAY_SAMPLING_START_HOUR, sampling_minute_interval);
                 return false;
             }
         }
@@ -84,7 +110,7 @@ public class SamplingManager extends BroadcastReceiver {
      * Starts repeating alarm
      *
      * @param context
-     * @param label          work/home
+     * @param label          work/home/regular_sampling
      * @param dayHour        Start hour of sampling
      * @param minuteInterval Minute interval
      */
@@ -98,8 +124,8 @@ public class SamplingManager extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, dayHour);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.MINUTE, 10);
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 6 * minuteInterval, samplingPi);
+                1000 * 60 * minuteInterval, samplingPi);
     }
 }

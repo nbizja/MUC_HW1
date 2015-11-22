@@ -58,6 +58,7 @@
             <intent-filter>
                 <action android:name="work" />
                 <action android:name="home" />
+                <action android:name="regular_sampling" />
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.SamplingManager">
@@ -67,6 +68,9 @@
         </receiver>
         <service
             android:name=".service.LocationService"
+            android:enabled="true"/>
+        <service
+            android:name=".service.WifiSignalService"
             android:enabled="true"/>
         <service
             android:name=".service.MachineLearning"

@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
      * Broadcast intent for sampling. Receiver: sampling manager.
      */
     public void triggerSampling() {
+        Log.e("MainActivity", "START SAMPLING");
         Intent samplingIntent = new Intent(START_SAMPLING);
         sendBroadcast(samplingIntent);
     }

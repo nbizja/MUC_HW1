@@ -25,6 +25,8 @@ public class WifiSignalService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.e("WifiSignalService", "Sampling like crazy");
+
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         locationDbHelper = new LocationDbHelper(this);
@@ -44,8 +46,8 @@ public class WifiSignalService extends IntentService {
         row.put("ssid", wifiSample.getSsid());
         row.put("trigger_id", wifiSample.getTriggerId());
         row.put("timestamp", wifiSample.getTimestamp());
-        long id = locationDbHelper.getDb().insert(LocationDbHelper.TABLE_NAME, null, row);
-        Log.e("SampledLocation", "id: " + id + "; trigger_id: " + wifiSample.getTriggerId());
+        long id = locationDbHelper.getDb().insert("wifi", null, row);
+        Log.e("SampledWifi", "id: " + id + "; trigger_id: " + wifiSample.getTriggerId());
 
         return id;
     }

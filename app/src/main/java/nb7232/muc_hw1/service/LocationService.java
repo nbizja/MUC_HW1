@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,12 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -31,12 +38,16 @@ public class LocationService extends IntentService implements
     private LocationDbHelper locationDbHelper;
     private Intent intent;
 
+    public static final double LOCATION_RADIUS = 200;
+    public static final String DEFAULT_LABEL = "other";
+
     public LocationService() {
         super("LocationService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.e("LocationService", "Sampling like crazy");
         this.intent = intent;
         buildGoogleApiClient(this);
         mGoogleApiClient.connect();
@@ -59,21 +70,52 @@ public class LocationService extends IntentService implements
 
         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mCurrentLocation != null) {
-            Log.i(TAG, "Connected to GoogleApiClient");
+            Log.e(TAG, "Connected to GoogleApiClient");
             ContentValues row = new ContentValues();
             row.put(LocationDbHelper.LATITUDE, mCurrentLocation.getLatitude());
             row.put(LocationDbHelper.LONGITUDE, mCurrentLocation.getLongitude());
-            row.put(LocationDbHelper.LABEL, intent.getStringExtra("label"));
             row.put(LocationDbHelper.TIMESTAMP, DateFormat.getTimeInstance().format(new
                     Date(mCurrentLocation.getTime())));
+            row.put("trigger_id", intent.getIntExtra("trigger_id",0));
+
+            if (intent.getStringExtra("label") == SamplingManager.REGULAR_SAMPLING) {
+                row.put(LocationDbHelper.LABEL, classify(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
+            } else {
+                row.put(LocationDbHelper.LABEL, intent.getStringExtra("label"));
+            }
             long id = locationDbHelper.getDb().insert(LocationDbHelper.TABLE_NAME, null, row);
-            Log.e("SampledLocation", "id: " + id + "; trigger_id: "+intent.getIntExtra("trigger_id",0));
+            Log.e("SampledLocation", "id: " + id + "; trigger_id: " + intent.getIntExtra("trigger_id", 0));
 
             if (id % SamplingManager.MACHINE_LEARNING_INTERVAL == 0) {
                 Intent saveIntent = new Intent(getApplicationContext(), MachineLearning.class);
                 getApplicationContext().startService(saveIntent);
             }
         }
+    }
+
+    public String classify(double latitude, double longitude) {
+        SharedPreferences prefs = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        String locations = prefs.getString("locations","");
+        try{
+            JSONArray locationsJson = new JSONArray(locations);
+            // The computed distance is stored in results[0].
+            //If results has length 2 or greater, the initial bearing is stored in results[1].
+            //If results has length 3 or greater, the final bearing is stored in results[2].
+            float[] results = new float[1];
+
+            for(int i = 0; i < locations.length(); i++) {
+                Location.distanceBetween(locationsJson.getJSONObject(i).getDouble("latitude"),
+                        locationsJson.getJSONObject(i).getDouble("longitude"),
+                        latitude, longitude, results);
+                if (results[0] < LOCATION_RADIUS) {
+                    return locationsJson.getJSONObject(i).getString("label");
+                }
+            }
+        } catch (JSONException je) {
+            Log.e("ConnectionMapFragment", je.getMessage());
+        }
+
+        return DEFAULT_LABEL;
     }
 
     @Override

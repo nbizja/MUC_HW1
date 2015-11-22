@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
+import nb7232.muc_hw1.R;
+
 /**
  * Created by nejc on 7.11.2015.
  */
@@ -29,15 +31,15 @@ public class LocationDbHelper extends SQLiteOpenHelper {
     private SQLiteDatabase db;
 
     final private static String LOCATION_TABLE = "CREATE TABLE location (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "trigger_id INTEGER NOT NULL" +
-            "latitude REAL NOT NULL, longitutde REAL NOT NULL, " +
+            "trigger_id INTEGER, " +
+            "latitude REAL NOT NULL, longitude REAL NOT NULL, " +
             "label TEXT, " +
             "timestamp TEXT NOT NULL)";
 
     final private static String CENTROID_TABLE = "CREATE TABLE centroid (id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "latitude REAL NOT NULL, longitude REAL NOT NULL, label TEXT, timestamp TEXT NOT NULL)";
 
-    final private static String WIFI_TABLE = "CREATE TABLE wifi (id INTEGER PRIMARY KEY AUTOINCREMENT, trigger_id INTEGER" +
+    final private static String WIFI_TABLE = "CREATE TABLE wifi (id INTEGER PRIMARY KEY AUTOINCREMENT, trigger_id INTEGER," +
             "ssid TEXT NOT NULL, bssid TEXT NOT NULL, rssi INTEGER NOT NULL, timestamp TEXT NOT NULL)";
 
     public LocationDbHelper(Context context) {
@@ -52,12 +54,12 @@ public class LocationDbHelper extends SQLiteOpenHelper {
         db.execSQL(LOCATION_TABLE);
         db.execSQL(CENTROID_TABLE);
         db.execSQL(WIFI_TABLE);
-        /*try {
+        try {
             populateDatabase(db, R.raw.home_samples);
             populateDatabase(db, R.raw.work_samples);
         } catch (IOException ioe) {
             Log.e("LocationDbHelper", "File does not exist!");
-        }*/
+        }
 
     }
 

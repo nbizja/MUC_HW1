@@ -18,13 +18,16 @@ public class SamplingBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("onReceive", "alarm received!");
+
         if (SamplingManager.checkAlarm(context, intent)) {
             Log.e("onReceive", "alarm ok! ");
 
             LocationDbHelper locationDbHelper = new LocationDbHelper(context);
             locationDbHelper.open();
-            Cursor cursor = locationDbHelper.getDb().rawQuery("SELECT MAX(trigger_id) as trigger_id FROM location", null);
-            int trigger_id = cursor.getInt(cursor.getColumnIndex("trigger_id"));
+            Cursor c = locationDbHelper.getDb().rawQuery("SELECT MAX(trigger_id) as trigger_id FROM location", null);
+            c.moveToFirst();
+            int trigger_id = c.getInt(c.getColumnIndex("trigger_id")) + 1;
 
             Intent locationSamplingIntent = new Intent(context, LocationService.class);
             locationSamplingIntent.putExtra("label", intent.getStringExtra("label"));
