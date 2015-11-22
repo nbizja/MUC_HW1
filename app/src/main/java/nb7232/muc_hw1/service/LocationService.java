@@ -80,7 +80,7 @@ public class LocationService extends IntentService implements
                     Date(mCurrentLocation.getTime())));
             row.put("trigger_id", intent.getIntExtra("trigger_id",0));
 
-            if (intent.getStringExtra("label") == SamplingManager.REGULAR_SAMPLING) {
+            if (intent.getStringExtra("label").equals(SamplingManager.REGULAR_SAMPLING)) {
                 row.put(LocationDbHelper.LABEL, classify(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
             } else {
                 row.put(LocationDbHelper.LABEL, intent.getStringExtra("label"));
@@ -103,12 +103,13 @@ public class LocationService extends IntentService implements
             // The computed distance is stored in results[0].
             //If results has length 2 or greater, the initial bearing is stored in results[1].
             //If results has length 3 or greater, the final bearing is stored in results[2].
-            float[] results = new float[1];
 
             for(int i = 0; i < locations.length(); i++) {
+                float[] results = new float[1];
                 Location.distanceBetween(locationsJson.getJSONObject(i).getDouble("latitude"),
                         locationsJson.getJSONObject(i).getDouble("longitude"),
                         latitude, longitude, results);
+                Log.e("LocationService", "results[0] = "+results[0]+ " < " +LOCATION_RADIUS+ " label = "+locationsJson.getJSONObject(i).getString("label"));
                 if (results[0] < LOCATION_RADIUS) {
                     return locationsJson.getJSONObject(i).getString("label");
                 }

@@ -8,7 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.Map;
+
 public class SamplingManager extends BroadcastReceiver{
 
     public static final String REGULAR_SAMPLING = "regular_sampling";
@@ -26,6 +32,8 @@ public class SamplingManager extends BroadcastReceiver{
      */
     public static final int MACHINE_LEARNING_INTERVAL = 100;
 
+    private Context mContext;
+
     /**
      * Night and day alarms are set
      *
@@ -34,9 +42,10 @@ public class SamplingManager extends BroadcastReceiver{
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        mContext = context;
         int sampling_minute_interval = getSamplingInterval(context);
         Log.e("SamplingManager", "sampling_minute_interval: "+sampling_minute_interval);
+        mock();
         if (hasLearned(context) || true) {
             startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
         } else {
@@ -71,6 +80,7 @@ public class SamplingManager extends BroadcastReceiver{
         int sampling_minute_interval = getSamplingInterval(context);
 
         if (hasLearned(context) ||true) {
+
             //startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
             //cancelSampling(context, DAY_SAMPLING);
             //cancelSampling(context, NIGHT_SAMPLING);
@@ -127,5 +137,32 @@ public class SamplingManager extends BroadcastReceiver{
         calendar.set(Calendar.MINUTE, 10);
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000 * 60 * minuteInterval, samplingPi);
+    }
+
+    private void mock() {
+        JSONArray locationsArray = new JSONArray();
+        //Log.e("updateLocations", "Starting update");
+            try {
+                JSONObject locationsJson = new JSONObject();
+                locationsJson.put("label", "home");
+                locationsJson.put("latitude", 45.789502);
+                locationsJson.put("longitude", 13.995830);
+                locationsArray.put(locationsJson);
+
+                JSONObject locationsJsonWork = new JSONObject();
+                locationsJsonWork.put("label", "work");
+                locationsJsonWork.put("latitude", 46.0495562);
+                locationsJsonWork.put("longitude", 14.4598176);
+                locationsArray.put(locationsJson);
+            } catch (JSONException je) {
+                Log.e("updateLocations", je.getMessage());
+            }
+            //Log.e("updateLocations", "updateCentroid()");
+            //updateCentroid(location.getKey(), location.getValue()[0], location.getValue()[1]);
+        SharedPreferences prefs = mContext.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        //Log.e("updateLocations", locationsArray.toString());
+        editor.putString("locations", locationsArray.toString());
+        editor.commit();
     }
 }

@@ -140,8 +140,7 @@ public class MachineLearning extends IntentService {
         //String whereClause = "label IS NOT NULL";
         Cursor cursor = locationDbHelper.getDb().rawQuery("SELECT * FROM location", null);
 
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
+        while (cursor.moveToNext()) {
             //Log.e("getLabeledData", cursor.getString(cursor.getColumnIndex("label")) + ": " + cursor.getDouble(cursor.getColumnIndex("latitude")) + " " + cursor.getDouble(cursor.getColumnIndex("longitude")));
             ArrayList<Value> instanceValues = new ArrayList<Value>();
             instanceValues.add(new Value(cursor.getDouble(cursor.getColumnIndex("latitude")), Value.NUMERIC_VALUE));
@@ -150,7 +149,6 @@ public class MachineLearning extends IntentService {
 
             instanceQ.add(new Instance(instanceValues));
 
-            cursor.moveToNext();
         }
 
         return instanceQ;

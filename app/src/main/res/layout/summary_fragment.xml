@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rssi_home"
-            android:visibility="invisible"/>
+            android:text="-15"/>
         <TextView
             android:paddingTop="10dp"
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rssi_work"
-            android:visibility="invisible"/>
+            android:text="-10"/>
         <TextView
             android:paddingTop="10dp"
             android:layout_width="match_parent"

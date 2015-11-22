@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,19 +57,21 @@ public class SummaryFragment extends Fragment implements SummaryTask.TaskListene
         Log.e("SummaryFragment", "onTaskCompleted");
 
         HashMap<String, Double> average = summary.getAverageRssi();
-        Log.e("SummaryFragment", "average.length = "+average.size());
+        Log.e("SummaryFragment", "average.length = " + average.size() + " " + Arrays.toString(average.keySet().toArray()));
 
-        for(Map.Entry<String,Double> rssi : average.entrySet()) {
-            if(rssi.getKey().equals("home")) {
-                TextView tv = (TextView) fragment.findViewById(R.id.rssi_home);
-                tv.setText(rssi.getValue().toString());
-                tv.setVisibility(View.VISIBLE);
-            } else if (rssi.getKey().equals("work")) {
-                TextView tv = (TextView) fragment.findViewById(R.id.rssi_work);
-                tv.setText(rssi.getValue().toString());
-                tv.setVisibility(View.VISIBLE);
-            }
+        if(average.containsKey("home")) {
+            TextView tv = (TextView) fragment.findViewById(R.id.rssi_home);
+            tv.setText(average.get("home").toString());
+            tv.setVisibility(View.VISIBLE);
+            Log.e("SummaryFragment", "SHOULD BE VISIBLE = " + average.get("home").toString());
+
         }
+        if (average.containsKey("work")) {
+                TextView tv2 = (TextView) fragment.findViewById(R.id.rssi_work);
+                tv2.setText(average.get("work").toString());
+                tv2.setVisibility(View.VISIBLE);
+        }
+
 
     }
 }
