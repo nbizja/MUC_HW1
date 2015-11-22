@@ -1,6 +1,7 @@
 package nb7232.muc_hw1.fragment;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -38,12 +39,12 @@ import nb7232.muc_hw1.task.SummaryTask;
 public class SummaryFragment extends Fragment implements SummaryTask.TaskListener{
 
     private View fragment;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         fragment = inflater.inflate(R.layout.summary_fragment, container, false);
-        refreshData();
         return fragment;
     }
 
@@ -83,30 +84,13 @@ public class SummaryFragment extends Fragment implements SummaryTask.TaskListene
                 tv2.setText(average.get("work").toString());
                 tv2.setVisibility(View.VISIBLE);
         }
-        /*List<String> apStrings = new ArrayList<>();
+        ArrayList<String> apStrings = new ArrayList<>();
         for(AccessPoint ap : summary.getTopAccessPoints()) {
             apStrings.add(ap.getSsid() + "; "+ap.getLabel() + "; "+ ap.getRssi()+";");
         }
-        String[] krneki = new String[]{"Totalno", "bv"};
-        ListView strongest_aps = (ListView) fragment.findViewById(R.id.strongest_aps);
-        final ArrayAdapter<String> apAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, R.id.strongest_aps, krneki);
 
-        strongest_aps.setAdapter(apAdapter);
-        strongest_aps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*
-                AccessPoint accessPoint = summary.getTopAccessPoints().get(position);
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.fragmentSwitch.instantiateItem()
+        //TODO should display list
 
-
-
-                TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-                tabLayout.setupWithViewPager(viewPager);
-            }
-        });
-        */
 
     }
 }

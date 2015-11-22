@@ -27,5 +27,4 @@ dependencies {
     compile 'com.google.android.gms:play-services:8.3.0'
     compile 'si.uni_lj.fri.lrss.machinelearningtoolkit:mltoolkit:1.2'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile project(path: ':backend', configuration: 'android-endpoints')
 }

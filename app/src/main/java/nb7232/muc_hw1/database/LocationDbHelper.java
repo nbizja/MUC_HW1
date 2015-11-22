@@ -37,10 +37,10 @@ public class LocationDbHelper extends SQLiteOpenHelper {
             "timestamp TEXT NOT NULL)";
 
     final private static String CENTROID_TABLE = "CREATE TABLE centroid (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "latitude REAL NOT NULL, longitude REAL NOT NULL, label TEXT, timestamp TEXT NOT NULL)";
+            "latitude REAL NOT NULL, longitude REAL NOT NULL, label TEXT, timestamp TEXT NOT NULL, uploaded INTEGER DEFAULT 0)";
 
     final private static String WIFI_TABLE = "CREATE TABLE wifi (id INTEGER PRIMARY KEY AUTOINCREMENT, trigger_id INTEGER," +
-            "ssid TEXT NOT NULL, bssid TEXT NOT NULL, rssi INTEGER NOT NULL, timestamp TEXT NOT NULL)";
+            "ssid TEXT NOT NULL, bssid TEXT NOT NULL, rssi INTEGER NOT NULL, timestamp TEXT NOT NULL, uploaded INTEGER DEFAULT 0)";
 
     public LocationDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

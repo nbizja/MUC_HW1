@@ -46,7 +46,7 @@ public class SamplingManager extends BroadcastReceiver{
         int sampling_minute_interval = getSamplingInterval(context);
         Log.e("SamplingManager", "sampling_minute_interval: "+sampling_minute_interval);
         mock();
-        if (hasLearned(context) || true) {
+        if (hasLearned(context)) {
             startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
         } else {
             startSampling(context, DAY_SAMPLING, DAY_SAMPLING_START_HOUR, sampling_minute_interval);
@@ -79,11 +79,11 @@ public class SamplingManager extends BroadcastReceiver{
         calendar.setTimeInMillis(System.currentTimeMillis());
         int sampling_minute_interval = getSamplingInterval(context);
 
-        if (hasLearned(context) ||true) {
-
-            //startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
-            //cancelSampling(context, DAY_SAMPLING);
-            //cancelSampling(context, NIGHT_SAMPLING);
+        if((intent.getAction().equals(DAY_SAMPLING) || intent.getAction().equals(NIGHT_SAMPLING)) && hasLearned(context)) {
+            cancelSampling(context, DAY_SAMPLING);
+            cancelSampling(context, NIGHT_SAMPLING);
+            startSampling(context, REGULAR_SAMPLING, 0, sampling_minute_interval);
+        } else if (hasLearned(context)) {
             return true;
         } else if (intent.getAction().equals(DAY_SAMPLING)) {
             if (calendar.get(Calendar.HOUR_OF_DAY) > DAY_SAMPLING_END_HOUR) {
