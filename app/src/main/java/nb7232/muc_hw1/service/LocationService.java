@@ -49,11 +49,13 @@ public class LocationService extends IntentService implements
     protected void onHandleIntent(Intent intent) {
         Log.e("LocationService", "Sampling like crazy");
         this.intent = intent;
+        locationDbHelper = new LocationDbHelper(this);
+        locationDbHelper.open();
+
         buildGoogleApiClient(this);
         mGoogleApiClient.connect();
 
-        locationDbHelper = new LocationDbHelper(this);
-        locationDbHelper.open();
+
     }
 
     protected synchronized void buildGoogleApiClient(Context context) {
