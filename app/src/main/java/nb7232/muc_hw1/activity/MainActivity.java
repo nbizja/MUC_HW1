@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final String START_SAMPLING = "start_sampling";
+    public ViewPager viewPager;
+    public MainActivityFragmentSwitch fragmentSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
              * After registration, sampling is triggered via broadcast
              */
             triggerSampling();
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            viewPager.setAdapter(new MainActivityFragmentSwitch(getSupportFragmentManager(),
-                    MainActivity.this));
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            fragmentSwitch = new MainActivityFragmentSwitch(getSupportFragmentManager(),
+                    MainActivity.this);
+            viewPager.setAdapter(fragmentSwitch);
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
             tabLayout.setupWithViewPager(viewPager);

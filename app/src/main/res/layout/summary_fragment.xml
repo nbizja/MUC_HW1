@@ -37,6 +37,13 @@
             android:layout_height="match_parent"
             android:id="@+id/summary_fragment_strongest_ap"
             android:text="@string/main_summary_strongest_ap_text"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/strongest_aps" />
+
+
     </LinearLayout>
 
 </ScrollView>

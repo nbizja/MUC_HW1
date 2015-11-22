@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -36,6 +37,10 @@ public class WifiSignalService extends IntentService {
             WifiSample wifiSample = sampleWifi();
             wifiSample.setTriggerId(intent.getIntExtra("trigger_id", 0));
             saveSample(wifiSample);
+            if (isStrongConnection() && isTopTen(wifiSample)) {
+                Intent uploadIntent = new Intent(this, UploadSamplesService.class);
+                startService(uploadIntent);
+            }
         }
     }
 
@@ -72,5 +77,17 @@ public class WifiSignalService extends IntentService {
     private boolean isStrongConnection() {
         int info = wifiManager.getConnectionInfo().getRssi();
         return info > -75;
+    }
+
+    private boolean isTopTen(WifiSample wifiSample) {
+        Cursor c = locationDbHelper.getDb().rawQuery("SELECT COUNT(id) as 'count', ssid, bssid FROM wifi GROUP BY bssid ORDER BY 'count' DESC", null);
+        int topTen = 0;
+        while(c.moveToNext()&& topTen < 10) {
+            if (c.getString(c.getColumnIndex("bssid")).equals(wifiSample.getBssid())) {
+                return true;
+            }
+            topTen++;
+        }
+        return false;
     }
 }

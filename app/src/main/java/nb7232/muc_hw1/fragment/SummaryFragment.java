@@ -1,24 +1,36 @@
 package nb7232.muc_hw1.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nb7232.muc_hw1.R;
+import nb7232.muc_hw1.activity.MainActivity;
+import nb7232.muc_hw1.adapter.MainActivityFragmentSwitch;
+import nb7232.muc_hw1.model.AccessPoint;
 import nb7232.muc_hw1.model.Summary;
 import nb7232.muc_hw1.task.SummaryTask;
 
@@ -53,7 +65,7 @@ public class SummaryFragment extends Fragment implements SummaryTask.TaskListene
     }
 
     @Override
-    public void onTaskCompleted(Summary summary) {
+    public void onTaskCompleted(final Summary summary) {
         Log.e("SummaryFragment", "onTaskCompleted");
 
         HashMap<String, Double> average = summary.getAverageRssi();
@@ -71,7 +83,30 @@ public class SummaryFragment extends Fragment implements SummaryTask.TaskListene
                 tv2.setText(average.get("work").toString());
                 tv2.setVisibility(View.VISIBLE);
         }
+        /*List<String> apStrings = new ArrayList<>();
+        for(AccessPoint ap : summary.getTopAccessPoints()) {
+            apStrings.add(ap.getSsid() + "; "+ap.getLabel() + "; "+ ap.getRssi()+";");
+        }
+        String[] krneki = new String[]{"Totalno", "bv"};
+        ListView strongest_aps = (ListView) fragment.findViewById(R.id.strongest_aps);
+        final ArrayAdapter<String> apAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, R.id.strongest_aps, krneki);
 
+        strongest_aps.setAdapter(apAdapter);
+        strongest_aps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /*
+                AccessPoint accessPoint = summary.getTopAccessPoints().get(position);
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.fragmentSwitch.instantiateItem()
+
+
+
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+                tabLayout.setupWithViewPager(viewPager);
+            }
+        });
+        */
 
     }
 }
